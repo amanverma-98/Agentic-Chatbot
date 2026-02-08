@@ -1,2 +1,4 @@
-langgraph
+chatbot_env
 .env
+__pycache__
+*.pyc
