@@ -9,7 +9,7 @@ checkpoint = InMemorySaver()
 
 #state
 class LLMState(TypedDict):
-    messages : Annotated[list[BaseMessage] , add_messages]
+    message_history : Annotated[list[BaseMessage] , add_messages]
 
 #graph
 graph = StateGraph(LLMState)
@@ -17,11 +17,11 @@ graph = StateGraph(LLMState)
 llm = ChatOllama(model = 'llama3')
 
 def chat(state : LLMState)-> LLMState:
-    message = state['messages']
+    message = state['message_history']
 
     response = llm.invoke(message)
 
-    return {'messages' : [response]}
+    return {'message_history' : [response]}
 
 
 graph.add_node('chat' , chat)
