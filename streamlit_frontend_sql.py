@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import streamlit as st
 from langgraph_sql import chatbot , retrieve_all_threads
 from langchain_core.messages import HumanMessage
@@ -92,6 +94,7 @@ if user_input:
         },
         "run_name": "chat_turn",
     }
+    # this config is used to observe the performance of chatbot on langsmith via thread
 
     with st.chat_message('assistant'):
 

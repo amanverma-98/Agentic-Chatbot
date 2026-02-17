@@ -1,6 +1,8 @@
+from dotenv import load_dotenv
+load_dotenv()
 from langgraph.graph import StateGraph , START , END
 from typing import TypedDict , Annotated
-from langchain_ollama import ChatOllama
+from langchain_groq import ChatGroq
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages #reducer
@@ -14,7 +16,7 @@ class LLMState(TypedDict):
 #graph
 graph = StateGraph(LLMState)
 
-llm = ChatOllama(model = 'llama3')
+llm = ChatGroq(model = 'llama-3.1-8b-instant')
 
 def chat(state : LLMState)-> LLMState:
     message = state['message_history']
