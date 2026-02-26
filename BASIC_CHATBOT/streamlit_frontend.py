@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 import streamlit as st
-from langgraph_sql import chatbot , retrieve_all_threads
+from BASIC_CHATBOT.langgraph_backend import chatbot
 from langchain_core.messages import HumanMessage
 import uuid
 
@@ -22,9 +22,8 @@ def add_thread(thread_id):
         st.session_state['chat_threads'].append(thread_id)
 
 def load_conversation(thread_id):
-    state = chatbot.get_state(config={'configurable': {'thread_id': thread_id}})
-    # Check if messages key exists in state values, return empty list if not
-    return state.values.get('message_history', [])
+    return chatbot.get_state(config={'configurable': {'thread_id': thread_id}}).values['message_history']
+
 
 
 
@@ -36,7 +35,7 @@ if 'thread_id' not in st.session_state:
     st.session_state['thread_id'] = generate_thread_id()
 
 if 'chat_threads' not in st.session_state:
-    st.session_state['chat_threads'] = retrieve_all_threads()
+    st.session_state['chat_threads'] = []
 
 add_thread(st.session_state['thread_id'])
 
@@ -86,15 +85,7 @@ if user_input:
     with st.chat_message('user'):
         st.text(user_input)
 
-    #CONFIG = {'configurable': {'thread_id': st.session_state['thread_id']}}
-    CONFIG = {
-        "configurable": {"thread_id": st.session_state["thread_id"]},
-        "metadata": {
-            "thread_id": st.session_state["thread_id"]
-        },
-        "run_name": "chat_turn",
-    }
-    # this config is used to observe the performance of chatbot on langsmith via thread
+    CONFIG = {'configurable': {'thread_id': st.session_state['thread_id']}}
 
     with st.chat_message('assistant'):
 
